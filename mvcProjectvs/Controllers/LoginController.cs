@@ -24,7 +24,6 @@ namespace mvcProjectvs.Controllers
         [HttpGet]
         public IActionResult Login()
         {
-            //var user = _db.Users.ToList();
             return View();
         }
         public async Task<IActionResult> Login(User login)
@@ -35,12 +34,12 @@ namespace mvcProjectvs.Controllers
             {
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name,login.Username)
+                    new Claim(ClaimTypes.Name,userControl.Username)
                 };
                 var useridentity = new ClaimsIdentity(claims,"Login");
                 ClaimsPrincipal principal = new ClaimsPrincipal(useridentity);
                 await HttpContext.SignInAsync(principal);
-                return RedirectToAction("Index","Homepage") ;
+                return RedirectToAction("Index","Homepage");
             }
             return View();
         }
