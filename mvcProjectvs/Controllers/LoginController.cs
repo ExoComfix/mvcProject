@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using mvcProjectvs.Models;
 using System.Diagnostics;
 using System.Security.Claims;
+using BCrypt;
 
 namespace mvcProjectvs.Controllers
 {
@@ -19,7 +19,7 @@ namespace mvcProjectvs.Controllers
         [Authorize]
         public IActionResult Index()
         {
-            return View();
+            return View();                                                              
         }
         [HttpGet]
         public IActionResult Login()
@@ -34,11 +34,10 @@ namespace mvcProjectvs.Controllers
             {
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name,userControl.Username)
-                };
+                    new Claim(ClaimTypes.Name,login.Username)
+                };  
                 var useridentity = new ClaimsIdentity(claims,"Login");
                 ClaimsPrincipal principal = new ClaimsPrincipal(useridentity);
-                await HttpContext.SignInAsync(principal);
                 return RedirectToAction("Index","Homepage");
             }
             return View();
@@ -47,6 +46,16 @@ namespace mvcProjectvs.Controllers
         public IActionResult Register() 
         {
             return View();
+        }
+        public async Task<IActionResult> Register(User register)
+        {
+            var userControl = _db.Users.FirstOrDefault(x => x.Username == register.Username);
+            if (userControl == null)
+            {
+                await _db.AddAsync(register);
+                await _db.SaveChangesAsync();
+            };
+            return RedirectToAction("Login", "Login");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -3,9 +3,7 @@
 }
 @using mvcProjectvs.Models
 @model List<User>
-
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -16,24 +14,20 @@
 </head>
 <body>
     <div class="center">
-        <div class="loginpic"><img src="~/img/empty.jpg"></div>
         <h1>Register</h1>
-        <form action="post">
+        <form action="#" method="post">
             <div class="txt_field">
-                <input type="text" required>
-                <span></span>
+                <input type="text" name="Username" required>
                 <label>Username</label>
             </div>
             <div class="txt_field">
-                <input type="password" required>
-                <span></span>
+                <input type="password" name="Password" required>
                 <label>Password</label>
             </div>
             <div class="pass">
-                <input type="submit" value="Signup">
+                <input type="submit" value="Signup" asp-area="" asp-controller="Login" asp-action="Register">
             </div>
         </form>
     </div>
 </body>
-</html>
 </html>

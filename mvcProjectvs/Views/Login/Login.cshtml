@@ -16,7 +16,7 @@
     <div class="center">
         <div class="loginpic"><img src="~/img/empty.jpg"></div>
         <h1>Login</h1>
-        <form action="post">
+        <form action="#" method="post">
             <div class="txt_field">
                 <input type="text" name="Username" required>
                 <label>Username</label>
@@ -26,7 +26,7 @@
                 <label>Password</label>
             </div>
             <div class="pass">
-                <input type="submit" value="Login">
+                <input type="submit" value="Login" asp-area="" asp-controller="Login" asp-action="Login">
                 <div class="signup_link"><p>Forgot Password ?</p>
                 Not a member ? <a asp-area="" asp-controller="Login" asp-action="Register">Signup</a>
                 </div>
