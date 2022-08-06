@@ -29,12 +29,12 @@ namespace mvcProjectvs.Controllers
         public IActionResult Login(User login)
         {
 
-            var userControl = _db.Users.FirstOrDefault(x => x.Username == login.Username && x.Password == login.Password);
+            var userControl = _db.Users.FirstOrDefault(x => x.Email == login.Email && x.Password == login.Password);
             if (userControl != null)
             {
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name,login.Username)
+                    new Claim(ClaimTypes.Name,login.Email)
                 };
                 var useridentity = new ClaimsIdentity(claims, "Login");
                 ClaimsPrincipal principal = new ClaimsPrincipal(useridentity);
@@ -50,7 +50,7 @@ namespace mvcProjectvs.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(User register)
         {
-            var userControl = _db.Users.FirstOrDefault(x => x.Username == register.Username && x.Password == register.Password);
+            var userControl = _db.Users.FirstOrDefault(x => x.Email == register.Email && x.Password == register.Password);
             if (userControl == null)
             {
                 await _db.AddAsync(register);

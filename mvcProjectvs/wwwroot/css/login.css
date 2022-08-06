@@ -35,7 +35,6 @@ form .txt_field {
     border-bottom: 2px solid #adadad;
     margin: 30px 0;
 }
-
 .txt_field input {
     width: 100%;
     padding: 0 5px;
@@ -85,9 +84,10 @@ form .txt_field {
     cursor: pointer;
 }
 
-    .pass:hover {
-        text-decoration: none;
-    }
+.pass:hover 
+{
+    text-decoration: none;
+}
 
 input[type="submit"] {
     width: 100%;
