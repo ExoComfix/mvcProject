@@ -19,14 +19,14 @@ namespace mvcProjectvs.Controllers
         [Authorize]
         public IActionResult Index()
         {
-            return View();                                                              
+            return View();
         }
         [HttpGet]
         public IActionResult Login()
         {
             return View();
         }
-        public async Task<IActionResult> Login(User login)
+        public IActionResult Login(User login)
         {
 
             var userControl = _db.Users.FirstOrDefault(x => x.Username == login.Username && x.Password == login.Password);
@@ -35,27 +35,33 @@ namespace mvcProjectvs.Controllers
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name,login.Username)
-                };  
-                var useridentity = new ClaimsIdentity(claims,"Login");
+                };
+                var useridentity = new ClaimsIdentity(claims, "Login");
                 ClaimsPrincipal principal = new ClaimsPrincipal(useridentity);
-                return RedirectToAction("Index","Homepage");
+                return RedirectToAction("Index", "Homepage");
             }
             return View();
         }
-        [HttpPost]
+        [HttpGet]
         public IActionResult Register() 
         {
             return View();
         }
+        [HttpPost]
         public async Task<IActionResult> Register(User register)
         {
-            var userControl = _db.Users.FirstOrDefault(x => x.Username == register.Username);
+            var userControl = _db.Users.FirstOrDefault(x => x.Username == register.Username && x.Password == register.Password);
             if (userControl == null)
             {
                 await _db.AddAsync(register);
                 await _db.SaveChangesAsync();
+            }
+            else
+            {
+                return View(register);
             };
             return RedirectToAction("Login", "Login");
+
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
