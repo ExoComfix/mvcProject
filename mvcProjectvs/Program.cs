@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using mvcProjectvs.Models;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using mvcProjectvs.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -8,6 +9,7 @@ builder.Services.AddControllersWithViews();
 builder.Configuration.AddJsonFile("appsettings.json");
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddScoped<MailService>();
 
 var app = builder.Build();
 
@@ -23,7 +25,6 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Login}/{action=Login}/{id?}");

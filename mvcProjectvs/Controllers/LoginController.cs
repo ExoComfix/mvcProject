@@ -3,19 +3,23 @@ using Microsoft.AspNetCore.Mvc;
 using mvcProjectvs.Models;
 using System.Diagnostics;
 using System.Security.Claims;
-using BCrypt;
+using mvcProjectvs.Services;
 
 namespace mvcProjectvs.Controllers
 {
     public class LoginController : Controller
     {
         private readonly DataContext _db;
+        private readonly MailService _mailService;
         public LoginController(
-            DataContext db
+            DataContext db,
+            MailService mailService
         )
         {
             _db = db;
+            _mailService = mailService;
         }
+
         [Authorize]
         public IActionResult Index()
         {
@@ -50,11 +54,12 @@ namespace mvcProjectvs.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(User register)
         {
-            var userControl = _db.Users.FirstOrDefault(x => x.Email == register.Email && x.Password == register.Password);
+            var userControl = _db.Users.FirstOrDefault(x => x.Email == register.Email);
             if (userControl == null)
             {
                 await _db.AddAsync(register);
                 await _db.SaveChangesAsync();
+                _mailService.SendWelcomeMail(register.Email);
             }
             else
             {
@@ -63,6 +68,22 @@ namespace mvcProjectvs.Controllers
             return RedirectToAction("Login", "Login");
 
         }
+        public IActionResult Forgot()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Forgot(User forgot)
+        {
+            var userControl = _db.Users.FirstOrDefault(x => x.Email == forgot.Email);
+            if (userControl != null)
+            {
+
+                _mailService.SendForgotMail(forgot.Email);
+            }
+            return RedirectToAction("Login", "Login");
+        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
